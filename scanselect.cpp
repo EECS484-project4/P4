@@ -34,26 +34,21 @@ Status Operators::ScanSelect(const string& result,       // Name of the output r
 	if(status != OK){
 		return status;
 	}
-
-
+	
+	status = heapFileScan.scanNext(outRid, record);
 	while(status == OK){
+		cout<<"while loop"<<endl;
 		Record outputRecord;
 		outputRecord.data = malloc(reclen);
-		status = heapFileScan.scanNext(outRid, record);
+		outputRecord.length = reclen;
 		int attrOffset = 0;
 		for (int i = 0; i < projCnt; i++){	
 			memcpy((char *)outputRecord.data + attrOffset,(char *) record.data + projNames[i].attrOffset, projNames[i].attrLen);
 			attrOffset += projNames[i].attrLen;
 		}
 		heapFile.insertRecord(outputRecord, outRid);
+		status = heapFileScan.scanNext(outRid, record);
 	}
-
-	Utilities utilities;
-
-	utilities.Print(result);	
-	
-
-
 
 	return OK;
 }

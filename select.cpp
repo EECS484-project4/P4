@@ -43,20 +43,12 @@ Status Operators::Select(const string & result,      // name of the output relat
 		projLength += projNamesDesc[i].attrLen;
 	}
 
-	//if (op == EQ && attrDesc.indexed) {
+	if (op == EQ && attrDesc.indexed) {
+		indexSelect();	
+	}
+	else {
 		ScanSelect(result, projCnt, projNamesDesc, &attrDesc, op, attrValue, projLength);
-		
-
-
-
-	//}
-
-
-
-
-
-
-
+	}
 
 	return OK;
 }
