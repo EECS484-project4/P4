@@ -2,6 +2,9 @@
 #include "query.h"
 #include "index.h"
 
+
+using namespace std;
+
 /*
  * Selects records from the specified relation.
  *
@@ -16,6 +19,24 @@ Status Operators::Select(const string & result,      // name of the output relat
 		         const Operator op,         // predicate operation
 		         const void *attrValue)     // literal value in the predicate
 {
+
+	cout<<"result: "<<result<<endl;
+
+	for(int i = 0; i < projCnt; i++){
+		cout<<"projNames["<<i<<"].relName: "<<projNames[i].relName<<endl;
+		cout<<"projNames["<<i<<"].attrName: "<<projNames[i].attrName<<endl;
+		cout<<"projNames["<<i<<"].attrType: "<<projNames[i].attrType<<endl;
+		cout<<"projNames["<<i<<"].attrLen: "<<projNames[i].attrLen<<endl;
+	}	
+
+
+
+
+
+
+
+
+
 
 return OK;
 }

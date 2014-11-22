@@ -32,6 +32,7 @@ Status Updates::Insert(const string& relation,      // Name of the relation
 	HeapFile heapFile(relation, status);
 
 	Utilities utilities;
+	
 	attrCat->getRelInfo(relation, attrDescCnt, AttrDescArray);
 
 	for(int i = 0; i < attrCnt; i++){
@@ -50,13 +51,13 @@ Status Updates::Insert(const string& relation,      // Name of the relation
 
 	cout<<"AttrDescArray: "<<endl;
 	for(int i = 0; i < attrDescCnt; i++){
-		cout<<"AttrDescArray["<<i<<"].relName = "<<AttrDescArray[i].relName<<endl;
-		cout<<"AttrDescArray["<<i<<"].attrName = "<<AttrDescArray[i].attrName<<endl;
-		cout<<"AttrDescArray["<<i<<"].attrOffset = "<<AttrDescArray[i].attrOffset<<endl;
-		cout<<"AttrDescArray["<<i<<"].attrType = "<<AttrDescArray[i].attrType<<endl;
-		cout<<"AttrDescArray["<<i<<"].attrLen = "<<AttrDescArray[i].attrLen<<endl;
-		cout<<"AttrDescArray["<<i<<"].indexed = "<<AttrDescArray[i].indexed<<endl;
-		cout<<"attrInfoMap[string(AttrDescArray[i].attrName)].attrName: "<<attrInfoMap[string(AttrDescArray[i].attrName)].attrName<<endl;	
+		// cout<<"AttrDescArray["<<i<<"].relName = "<<AttrDescArray[i].relName<<endl;
+		// cout<<"AttrDescArray["<<i<<"].attrName = "<<AttrDescArray[i].attrName<<endl;
+		// cout<<"AttrDescArray["<<i<<"].attrOffset = "<<AttrDescArray[i].attrOffset<<endl;
+		// cout<<"AttrDescArray["<<i<<"].attrType = "<<AttrDescArray[i].attrType<<endl;
+		// cout<<"AttrDescArray["<<i<<"].attrLen = "<<AttrDescArray[i].attrLen<<endl;
+		// cout<<"AttrDescArray["<<i<<"].indexed = "<<AttrDescArray[i].indexed<<endl;
+		// cout<<"attrInfoMap[string(AttrDescArray[i].attrName)].attrName: "<<attrInfoMap[string(AttrDescArray[i].attrName)].attrName<<endl;	
 		memcpy(record.data + AttrDescArray[i].attrOffset, attrInfoMap[string(AttrDescArray[i].attrName)].attrValue, AttrDescArray[i].attrLen);	
 	}
 
