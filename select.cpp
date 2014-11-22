@@ -29,6 +29,27 @@ Status Operators::Select(const string & result,      // name of the output relat
 		cout<<"projNames["<<i<<"].attrLen: "<<projNames[i].attrLen<<endl;
 	}	
 
+	Status status;
+	AttrDesc attrDesc;
+	status = attrCat->getInfo(string(attr->relName), string(attr->attrName), attrDesc);
+		
+	int projLength = 0;
+
+
+	AttrDesc projNamesDesc[ projCnt ];	
+
+	for (int i = 0; i < projCnt; i++) {
+		attrCat->getInfo(projNames[i].relName, projNames[i].attrName, projNamesDesc[i]);
+		projLength += projNamesDesc[i].attrLen;
+	}
+
+	//if (op == EQ && attrDesc.indexed) {
+		ScanSelect(result, projCnt, projNamesDesc, &attrDesc, op, attrValue, projLength);
+		
+
+
+
+	//}
 
 
 
@@ -37,7 +58,6 @@ Status Operators::Select(const string & result,      // name of the output relat
 
 
 
-
-return OK;
+	return OK;
 }
 

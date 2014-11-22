@@ -1,6 +1,12 @@
 #include "catalog.h"
 #include "query.h"
 #include "index.h"
+#include <iostream>
+#include <map>
+#include <string.h>
+#include "utility.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 /* 
  * A simple scan select using a heap file scan
@@ -14,9 +20,42 @@ Status Operators::ScanSelect(const string& result,       // Name of the output r
                              const void* attrValue,      // Pointer to the literal value in the predicate
                              const int reclen)           // Length of a tuple in the result relation
 {
-  cout << "Algorithm: File Scan" << endl;
+	cout << "Algorithm: File Scan" << endl;
   
-  /* Your solution goes here */
+	/* Your solution goes here */
+	Status status;
+	Record record;
+	RID outRid;
+	HeapFile heapFile(result, status);
+	if(status != OK){
+		return status;
+	}
+	HeapFileScan heapFileScan(attrDesc->relName, attrDesc->attrOffset, attrDesc->attrLen, (Datatype)(attrDesc->attrType), (char*)attrValue, op, status);
+	if(status != OK){
+		return status;
+	}
 
-  return OK;
+
+	while(status == OK){
+		Record outputRecord;
+		outputRecord.data = malloc(reclen);
+		status = heapFileScan.scanNext(outRid, record);
+		int attrOffset = 0;
+		for (int i = 0; i < projCnt; i++){	
+			memcpy((char *)outputRecord.data + attrOffset,(char *) record.data + projNames[i].attrOffset, projNames[i].attrLen);
+			attrOffset += projNames[i].attrLen;
+		}
+		heapFile.insertRecord(outputRecord, outRid);
+	}
+
+	Utilities utilities;
+
+	utilities.Print(result);	
+	
+
+
+
+	return OK;
 }
+
+
