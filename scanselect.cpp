@@ -26,18 +26,22 @@ Status Operators::ScanSelect(const string& result,       // Name of the output r
 	Status status;
 	Record record;
 	RID outRid;
+	
 	HeapFile heapFile(result, status);
 	if(status != OK){
 		return status;
 	}
+
 	HeapFileScan heapFileScan(attrDesc->relName, attrDesc->attrOffset, attrDesc->attrLen, (Datatype)(attrDesc->attrType), (char*)attrValue, op, status);
 	if(status != OK){
 		return status;
 	}
 	
 	status = heapFileScan.scanNext(outRid, record);
+	if(status != OK){
+		return status;
+	}
 	while(status == OK){
-		cout<<"while loop"<<endl;
 		Record outputRecord;
 		outputRecord.data = malloc(reclen);
 		outputRecord.length = reclen;

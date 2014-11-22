@@ -44,7 +44,7 @@ Status Operators::Select(const string & result,      // name of the output relat
 	}
 
 	if (op == EQ && attrDesc.indexed) {
-		indexSelect();	
+		IndexSelect(result, projCnt, projNamesDesc, &attrDesc, op, attrValue, projLength);
 	}
 	else {
 		ScanSelect(result, projCnt, projNamesDesc, &attrDesc, op, attrValue, projLength);
