@@ -31,18 +31,23 @@ Status Operators::Select(const string & result,      // name of the output relat
 
 	Status status;
 	AttrDesc attrDesc;
-	status = attrCat->getInfo(string(attr->relName), string(attr->attrName), attrDesc);
-		
-	int projLength = 0;
-
-
+	// sselect all attributes
 	AttrDesc projNamesDesc[ projCnt ];	
-
+	
+	int projLength = 0;
 	for (int i = 0; i < projCnt; i++) {
 		attrCat->getInfo(projNames[i].relName, projNames[i].attrName, projNamesDesc[i]);
 		projLength += projNamesDesc[i].attrLen;
 	}
 
+	if(attr == 0){
+		ScanSelect(result, projCnt, projNamesDesc, 0, op, attrValue, projLength);
+
+		return OK;
+	}
+
+	status = attrCat->getInfo(string(attr->relName), string(attr->attrName), attrDesc);
+		
 	if (op == EQ && attrDesc.indexed) {
 		IndexSelect(result, projCnt, projNamesDesc, &attrDesc, op, attrValue, projLength);
 	}

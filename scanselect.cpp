@@ -32,16 +32,28 @@ Status Operators::ScanSelect(const string& result,       // Name of the output r
 		return status;
 	}
 
-	HeapFileScan heapFileScan(attrDesc->relName, attrDesc->attrOffset, attrDesc->attrLen, (Datatype)(attrDesc->attrType), (char*)attrValue, op, status);
+	HeapFileScan heapFileScan(projNames[0].relName, status);
+	
 	if(status != OK){
 		return status;
+	}
+
+	if(attrDesc != 0){
+	   	status = heapFileScan.startScan(attrDesc->attrOffset, attrDesc->attrLen, (Datatype)(attrDesc->attrType), (char*)attrValue, op);		
+		if(status != OK){
+			return status;
+		}
 	}
 	
 	status = heapFileScan.scanNext(outRid, record);
 	if(status != OK){
 		return status;
 	}
+
+	cout<<"phase1"<<endl;
+
 	while(status == OK){
+		cout<<"phase2"<<endl;
 		Record outputRecord;
 		outputRecord.data = malloc(reclen);
 		outputRecord.length = reclen;
@@ -54,7 +66,13 @@ Status Operators::ScanSelect(const string& result,       // Name of the output r
 		status = heapFileScan.scanNext(outRid, record);
 	}
 
-	return OK;
+	heapFileScan.endScan();
+
+	Utilities utilities;
+	cout<<"Begin: utilities.Print(result): "<<endl;
+	utilities.Print(result);
+	cout<<"End: utilities.Print(result): "<<endl;
+	return status;
 }
 
 

@@ -25,6 +25,38 @@ Status Operators::Join(const string& result,           // Name of the output rel
 {
     /* Your solution goes here */
 
+    Status status;
+    AttrDesc attrDesc1;
+    AttrDesc attrDesc2;
+    status = attrCat->getInfo(string(attr1->relName), string(attr1->attrName), attrDesc1);
+
+    if( status != OK){
+        return status;
+    }
+
+    status = attrCat->getInfo(string(attr2->relName), string(attr2->attrName), attrDesc2);
+
+    if( status != OK){
+        return status;
+    }
+
+        
+    int projLength = 0;
+
+    AttrDesc projNamesDesc[ projCnt ];  
+
+    for (int i = 0; i < projCnt; i++) {
+        attrCat->getInfo(projNames[i].relName, projNames[i].attrName, projNamesDesc[i]);
+        projLength += projNamesDesc[i].attrLen;
+    }
+
+    status = SNL(result, projCnt, projNamesDesc, attrDesc1, op, attrDesc2, projLength);  
+
+    if( status != OK){
+        return status;
+    }
+  
+
 	return OK;
 }
 
