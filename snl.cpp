@@ -12,41 +12,17 @@ bool checkMatch(int cmp, Operator op)
 {
 	switch(op){
 		case LT:
-			if(cmp < 0 ){
-				return true;
-			}else{
-				return false;
-			}
+			return cmp < 0;
 		case LTE:
-			if(cmp <= 0 ){
-				return true;
-			}else{
-				return false;
-			}
+			return cmp <= 0;
 		case EQ:
-			if(cmp == 0 ){
-				return true;
-			}else{
-				return false;
-			}
+			return cmp == 0;
 		case GTE:
-			if(cmp >= 0 ){
-				return true;
-			}else{
-				return false;
-			}
+			return cmp >= 0;
 		case GT:
-			if(cmp > 0 ){
-				return true;
-			}else{
-				return false;
-			}
+			return cmp > 0;
 		case NE:
-			if(cmp != 0 ){
-				return true;
-			}else{
-				return false;
-			}		
+			return cmp != 0;
 		case NOTSET:
 			break;
 	}
@@ -67,26 +43,58 @@ Status Operators::SNL(const string& result,           // Output relation name
   	cout << "Algorithm: Simple NL Join" << endl;
 
   	/* Your solution goes here */
-	Status status;
-	Status status1;
-	Status status2;
-	Record record1;
-	Record record2;	
-	RID outRid;
-	RID outRid1;
-	RID outRid2;
+	Status status, status1, status2;
+	Record record1, record2;
+	RID outRid, outRid1, outRid2;
 	HeapFile heapFile(result, status);
 
-	HeapFileScan heapFileScan1(attrDesc1.relName, status);
-	HeapFileScan heapFileScan2(attrDesc2.relName, status);	
+	HeapFileScan heapFileScan[] = { HeapFileScan(attrDesc1.relName, status), HeapFileScan(attrDesc2.relName, status) };
 	
 	if(status != OK){
 		return status;
 	}
 
-	int count1 = 0;
-	int count2 = 0;
+	int idx1, idx2;
+	if( heapFileScan[0].getRecCnt() <= heapFileScan[1].getRecCnt() ) {
+		idx1 = 0;
+	}else{
+		idx1 = 1;
+	}
+	idx2 = 1 - idx1;
 
+	status1 = heapFileScan[idx1].scanNext(outRid1, record1);
+	status2 = heapFileScan[idx2].scanNext(outRid2, record2);	
+	heapFileScan[idx2].setMarker();
+	while(status1 == OK) {
+		status2 = heapFileScan[idx2].gotoMarker(outRid2, record2);
+		while(status2 == OK) {
+			int cmp = matchRec(record1, record2, attrDesc1, attrDesc2);
+			if(checkMatch(cmp, op) == true){
+				Record outputRecord;
+				outputRecord.data = malloc(reclen);
+				outputRecord.length = reclen;
+				int attrOffset = 0;
+				for (int i = 0; i < projCnt; i++) {	
+					if (strcmp(attrDescArray[i].relName, attrDesc1.relName) == 0) {
+						memcpy((char *)outputRecord.data + attrOffset, (char *) record1.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
+					}else if(strcmp(attrDescArray[i].relName, attrDesc2.relName) == 0){
+						memcpy((char *)outputRecord.data + attrOffset, (char *) record2.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
+					}else{
+						cout<<"relName not match"<<endl;
+						assert(false);
+					}
+					attrOffset += attrDescArray[i].attrLen;
+				}
+				heapFile.insertRecord(outputRecord, outRid);
+			}
+			status2 = heapFileScan[idx2].scanNext(outRid2, record2);
+		}
+		status1 = heapFileScan[idx1].scanNext(outRid1, record1);
+	}
+			
+
+
+	/*
 	if(heapFileScan1.getRecCnt() < heapFileScan2.getRecCnt()){
 		status1 = heapFileScan1.scanNext(outRid1, record1);
 		status2 = heapFileScan2.scanNext(outRid2, record2);	
@@ -162,8 +170,7 @@ Status Operators::SNL(const string& result,           // Output relation name
 			status2 = heapFileScan2.scanNext(outRid2, record2);
 		}
 	}
-
-	cout << "count1 = " << count1 << endl;
+	*/
 
 	Utilities utilities;
 	utilities.Print(result);
