@@ -49,7 +49,8 @@ Status Operators::SNL(const string& result,           // Output relation name
 	HeapFile heapFile(result, status);
 
 	HeapFileScan heapFileScan[] = { HeapFileScan(attrDesc1.relName, status), HeapFileScan(attrDesc2.relName, status) };
-	
+	AttrDesc attrDesc[] = {attrDesc1, attrDesc2};	
+
 	if(status != OK){
 		return status;
 	}
@@ -68,16 +69,16 @@ Status Operators::SNL(const string& result,           // Output relation name
 	while(status1 == OK) {
 		status2 = heapFileScan[idx2].gotoMarker(outRid2, record2);
 		while(status2 == OK) {
-			int cmp = matchRec(record1, record2, attrDesc1, attrDesc2);
+			int cmp = matchRec(record1, record2, attrDesc[idx1], attrDesc[idx2]);
 			if(checkMatch(cmp, op) == true){
 				Record outputRecord;
 				outputRecord.data = malloc(reclen);
 				outputRecord.length = reclen;
 				int attrOffset = 0;
 				for (int i = 0; i < projCnt; i++) {	
-					if (strcmp(attrDescArray[i].relName, attrDesc1.relName) == 0) {
+					if (strcmp(attrDescArray[i].relName, attrDesc[idx1].relName) == 0) {
 						memcpy((char *)outputRecord.data + attrOffset, (char *) record1.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
-					}else if(strcmp(attrDescArray[i].relName, attrDesc2.relName) == 0){
+					}else if(strcmp(attrDescArray[i].relName, attrDesc[idx2].relName) == 0){
 						memcpy((char *)outputRecord.data + attrOffset, (char *) record2.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
 					}else{
 						cout<<"relName not match"<<endl;

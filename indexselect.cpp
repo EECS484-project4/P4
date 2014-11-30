@@ -32,7 +32,7 @@ Status Operators::IndexSelect(const string& result,       // Name of the output 
 		return status;
 	}
 
-	Index index(attrDesc->relName, attrDesc->attrOffset, attrDesc->attrLen,(Datatype)attrDesc->attrType, 0, status);
+	Index index(attrDesc->relName, attrDesc->attrOffset, attrDesc->attrLen, (Datatype)attrDesc->attrType, 0, status);
 	if (status != OK){
 		return status;
 	}
@@ -57,6 +57,7 @@ Status Operators::IndexSelect(const string& result,       // Name of the output 
 			memcpy((char *)outputRecord.data + attrOffset,(char *) record.data + projNames[i].attrOffset, projNames[i].attrLen);
 			attrOffset += projNames[i].attrLen;
 		}
+		
 		heapFile.insertRecord(outputRecord, outRid);
 
 		status = index.scanNext(outRid);

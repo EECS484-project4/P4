@@ -50,7 +50,18 @@ Status Operators::Join(const string& result,           // Name of the output rel
         projLength += projNamesDesc[i].attrLen;
     }
 
-    status = SNL(result, projCnt, projNamesDesc, attrDesc1, op, attrDesc2, projLength);  
+    if (op == EQ){
+
+        if(!attrDesc1.indexed && !attrDesc2.indexed){
+            status = SMJ(result, projCnt, projNamesDesc, attrDesc1, op, attrDesc2, projLength);
+        }else{
+            status = INL(result, projCnt, projNamesDesc, attrDesc1, op, attrDesc2, projLength);
+        }
+
+    }else{
+
+        status = SNL(result, projCnt, projNamesDesc, attrDesc1, op, attrDesc2, projLength);  
+    }
 
     if( status != OK){
         return status;
