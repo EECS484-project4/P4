@@ -57,19 +57,31 @@ Status Operators::SNL(const string& result,           // Output relation name
 
 	int idx1, idx2;
 	if( heapFileScan[0].getRecCnt() <= heapFileScan[1].getRecCnt() ) {
-		idx1 = 0;
-	}else{
 		idx1 = 1;
+	}else{
+		idx1 = 0;
 	}
 	idx2 = 1 - idx1;
+
+	int count1 = 0;
+	int count2 = 0;	
 
 	status1 = heapFileScan[idx1].scanNext(outRid1, record1);
 	status2 = heapFileScan[idx2].scanNext(outRid2, record2);	
 	heapFileScan[idx2].setMarker();
 	while(status1 == OK) {
+		count1++;
+		cout << "count2 = " << count2 << endl;
+		count2 = 0;
 		status2 = heapFileScan[idx2].gotoMarker(outRid2, record2);
 		while(status2 == OK) {
-			int cmp = matchRec(record1, record2, attrDesc[idx1], attrDesc[idx2]);
+			count2++;
+			int cmp;
+			if (idx1 == 0){
+				cmp = matchRec(record1, record2, attrDesc1, attrDesc2);
+			}else{
+				cmp = matchRec(record2, record1, attrDesc1, attrDesc2);
+			}
 			if(checkMatch(cmp, op) == true){
 				Record outputRecord;
 				outputRecord.data = malloc(reclen);
@@ -93,7 +105,7 @@ Status Operators::SNL(const string& result,           // Output relation name
 		status1 = heapFileScan[idx1].scanNext(outRid1, record1);
 	}
 			
-
+	cout << "count1 = " << count1 << endl;
 
 	/*
 	if(heapFileScan1.getRecCnt() < heapFileScan2.getRecCnt()){
@@ -173,8 +185,8 @@ Status Operators::SNL(const string& result,           // Output relation name
 	}
 	*/
 
-	Utilities utilities;
-	utilities.Print(result);
+	// Utilities utilities;
+	// utilities.Print(result);
 
   	return OK;
 }

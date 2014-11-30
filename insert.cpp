@@ -31,14 +31,27 @@ Status Updates::Insert(const string& relation,      // Name of the relation
 
 	HeapFile heapFile(relation, status);
 
-	Utilities utilities;
 	
 	attrCat->getRelInfo(relation, attrDescCnt, AttrDescArray);
+
+	if(attrCnt > attrDescCnt){
+		return ATTRTOOLONG;
+	}
+
+	if(attrCnt < attrDescCnt){
+		return ATTRNOTFOUND;
+	}
 
 	for(int i = 0; i < attrCnt; i++){
 		attrInfoMap[string(attrList[i].attrName)] = attrList[i];
 	}
 	
+	for(int i = 0; i < attrDescCnt; i++){
+		if(attrInfoMap.find(string(AttrDescArray[i].attrName)) == attrInfoMap.end()){
+			return ATTRNOTFOUND;
+		}
+	}
+
 	Record record;
 	
 	RID outRid;	
@@ -49,53 +62,34 @@ Status Updates::Insert(const string& relation,      // Name of the relation
 	record.data = malloc(recordSize);
 	record.length = recordSize;
 
-	cout<<"AttrDescArray: "<<endl;
 	for(int i = 0; i < attrDescCnt; i++){
-		// cout<<"AttrDescArray["<<i<<"].relName = "<<AttrDescArray[i].relName<<endl;
-		// cout<<"AttrDescArray["<<i<<"].attrName = "<<AttrDescArray[i].attrName<<endl;
-		// cout<<"AttrDescArray["<<i<<"].attrOffset = "<<AttrDescArray[i].attrOffset<<endl;
-		// cout<<"AttrDescArray["<<i<<"].attrType = "<<AttrDescArray[i].attrType<<endl;
-		// cout<<"AttrDescArray["<<i<<"].attrLen = "<<AttrDescArray[i].attrLen<<endl;
-		// cout<<"AttrDescArray["<<i<<"].indexed = "<<AttrDescArray[i].indexed<<endl;
-		// cout<<"attrInfoMap[string(AttrDescArray[i].attrName)].attrName: "<<attrInfoMap[string(AttrDescArray[i].attrName)].attrName<<endl;	
-		memcpy(record.data + AttrDescArray[i].attrOffset, attrInfoMap[string(AttrDescArray[i].attrName)].attrValue, AttrDescArray[i].attrLen);	
+		memcpy((char*)record.data + AttrDescArray[i].attrOffset, attrInfoMap[string(AttrDescArray[i].attrName)].attrValue, AttrDescArray[i].attrLen);	
 	}
 
 	status = heapFile.insertRecord(record, outRid);
+
+	if(status != OK){
+		return status;
+	}
+
 
 	// update index
 	for(int i = 0;i < attrDescCnt; i++){
 		if(AttrDescArray[i].indexed){
 			
 			Index index(AttrDescArray[i].relName, AttrDescArray[i].attrOffset, AttrDescArray[i].attrLen, (Datatype)AttrDescArray[i].attrType, 0, status);
-			index.insertEntry(record.data + AttrDescArray[i].attrOffset, outRid);
+			
+			if(status != OK){
+				return status;
+			}
+			index.insertEntry((char*)record.data + AttrDescArray[i].attrOffset, outRid);
 	
 		}
 	}	
 	
-	
-	// // error handling
-	// if(attrCnt != attrDescCCnt){
-	// 	cout<<"attrCnt != attrDescCCnt"<<endl;
-	// 	// return
-	// }
 
-	// for(int i = 0; i < attrDescCnt; i++){
-	// 	if(attrInfoMap.find(string(AttrDescArray[i].attrName)) == attrInfoMap.end()){
-	// 		cout<<"Cannot find the corresponding attribute."<<endl; 
-	// 		// return 
-	// 	}
-	// }
-
-	// for(int i = 0; i < attrCnt; i++){
-	// 	status = getInfo(attrList[i].relName, attrList[i].attrName, record);
-
-	// 	if(status != OK){
-	// 		return status;
-	// 	}
-	// }
-	
-	status = utilities.Print(relation);
+	// Utilities utilities;
+	// status = utilities.Print(relation);
 
     return OK;
 }

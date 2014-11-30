@@ -20,14 +20,14 @@ Status Operators::Select(const string & result,      // name of the output relat
 		         const void *attrValue)     // literal value in the predicate
 {
 
-	cout<<"result: "<<result<<endl;
+	//cout<<"result: "<<result<<endl;
 
-	for(int i = 0; i < projCnt; i++){
-		cout<<"projNames["<<i<<"].relName: "<<projNames[i].relName<<endl;
-		cout<<"projNames["<<i<<"].attrName: "<<projNames[i].attrName<<endl;
-		cout<<"projNames["<<i<<"].attrType: "<<projNames[i].attrType<<endl;
-		cout<<"projNames["<<i<<"].attrLen: "<<projNames[i].attrLen<<endl;
-	}	
+	//for(int i = 0; i < projCnt; i++){
+	//	cout<<"projNames["<<i<<"].relName: "<<projNames[i].relName<<endl;
+	//	cout<<"projNames["<<i<<"].attrName: "<<projNames[i].attrName<<endl;
+	//	cout<<"projNames["<<i<<"].attrType: "<<projNames[i].attrType<<endl;
+	// 	cout<<"projNames["<<i<<"].attrLen: "<<projNames[i].attrLen<<endl;
+	// }	
 
 	Status status;
 	AttrDesc attrDesc;

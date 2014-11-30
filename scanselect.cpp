@@ -50,10 +50,8 @@ Status Operators::ScanSelect(const string& result,       // Name of the output r
 		return status;
 	}
 
-	cout<<"phase1"<<endl;
 
 	while(status == OK){
-		cout<<"phase2"<<endl;
 		Record outputRecord;
 		outputRecord.data = malloc(reclen);
 		outputRecord.length = reclen;
@@ -68,10 +66,10 @@ Status Operators::ScanSelect(const string& result,       // Name of the output r
 
 	heapFileScan.endScan();
 
-	Utilities utilities;
-	cout<<"Begin: utilities.Print(result): "<<endl;
-	utilities.Print(result);
-	cout<<"End: utilities.Print(result): "<<endl;
+	//Utilities utilities;
+	//cout<<"Begin: utilities.Print(result): "<<endl;
+	//utilities.Print(result);
+	//cout<<"End: utilities.Print(result): "<<endl;
 	return status;
 }
 

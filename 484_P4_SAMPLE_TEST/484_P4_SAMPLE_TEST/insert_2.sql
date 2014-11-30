@@ -11,7 +11,7 @@ CREATE TABLE soaps(soapid integer, name char(32),
 -- Should get an error for creating index on network (b/c of Char dataype)
 CREATE INDEX soaps (soapid);
 CREATE INDEX soaps (rating);
-CREATE INDEX soaps (network);
+-- CREATE INDEX soaps (network);
 
 -- insert with attributes in order
 INSERT INTO soaps (soapid, name, network, rating) 
