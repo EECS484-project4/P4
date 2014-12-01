@@ -55,14 +55,22 @@ Status Operators::INL(const string& result,           // Name of the output rela
 		return status;
 	}
 
-	status1 = heapFileScan[idx1].scanNext(outRid1, record1);
-	void* attrValue = 0;	
-	while(status1 == OK) {
-		//memset((char *)attrValue, 0, attrDesc[idx1].attrLen);
-		memcpy(attrValue, (char *) record1.data + attrDesc[idx1].attrOffset, attrDesc[idx1].attrLen);
+	cout<<"phase1"<<endl;
 
+	status1 = heapFileScan[idx1].scanNext(outRid1, record1);
+	cout<<"phase1.1"<<endl;	
+
+	void* attrValue;	
+	while(status1 == OK) {
+		cout<<"phase1.2"<<endl;
+		//memset((char *)attrValue, 0, attrDesc[idx1].attrLen);
+		memcpy((char *)attrValue, (char *)(record1.data + attrDesc[idx1].attrOffset), attrDesc[idx1].attrLen);
+		
+		cout<<"phase2"<<endl;
 		status2 = index.startScan(attrValue);
+		cout<<"phase3"<<endl;
 		status2 = index.scanNext(outRid2);
+		cout<<"phase4"<<endl;
 
 		while(status2 == OK) {
 
@@ -90,7 +98,7 @@ Status Operators::INL(const string& result,           // Name of the output rela
 		status1 = heapFileScan[idx1].scanNext(outRid1, record1);
 	}
 
-
-  return OK;
+	cout << "End: INL" <<endl;
+  	return OK;
 }
 
