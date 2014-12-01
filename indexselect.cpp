@@ -52,6 +52,7 @@ Status Operators::IndexSelect(const string& result,       // Name of the output 
 		Record outputRecord;
 		outputRecord.data = malloc(reclen);
 		outputRecord.length = reclen;
+		
 		int attrOffset = 0;
 		for (int i = 0; i < projCnt; i++){	
 			memcpy((char *)outputRecord.data + attrOffset,(char *) record.data + projNames[i].attrOffset, projNames[i].attrLen);

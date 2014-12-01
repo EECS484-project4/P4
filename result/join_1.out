@@ -414,4 +414,116 @@ serial.  ikey.1  filler.2
 Number of records: 5149
 Buf Stats: accesses = 7255, disk reads = 564, disk writes = 1039
 
-206 --> 
+206 --> Query:  select da.serial, da.ikey, da.filler from da, db where da.serial = db.serial;
+Algorithm: SM Join
+serial.  ikey.1  filler.2         
+-------  ------  ---------------  
+0        11618   00000 string re  
+1        15378   00001 string re  
+2        17233   00002 string re  
+3        19052   00003 string re  
+4        24069   00004 string re  
+5        17188   00005 string re  
+6        28769   00006 string re  
+7        15168   00007 string re  
+8        578     00008 string re  
+9        21055   00009 string re  
+10       7648    00010 string re  
+11       10153   00011 string re  
+12       31851   00012 string re  
+13       25573   00013 string re  
+14       23765   00014 string re  
+15       8758    00015 string re  
+16       18243   00016 string re  
+17       26285   00017 string re  
+18       32157   00018 string re  
+19       21879   00019 string re  
+20       27960   00020 string re  
+21       18894   00021 string re  
+22       3976    00022 string re  
+23       24943   00023 string re  
+24       14177   00024 string re  
+25       18028   00025 string re  
+26       15920   00026 string re  
+27       9143    00027 string re  
+28       20534   00028 string re  
+29       29094   00029 string re  
+30       10397   00030 string re  
+31       22130   00031 string re  
+32       22033   00032 string re  
+33       25436   00033 string re  
+34       3610    00034 string re  
+35       12788   00035 string re  
+36       6504    00036 string re  
+37       32193   00037 string re  
+38       27861   00038 string re  
+39       32049   00039 string re  
+40       65      00040 string re  
+41       8612    00041 string re  
+42       28218   00042 string re  
+43       14567   00043 string re  
+44       23696   00044 string re  
+45       23421   00045 string re  
+46       15628   00046 string re  
+47       20875   00047 string re  
+48       31859   00048 string re  
+49       21818   00049 string re  
+50       8520    00050 string re  
+51       1013    00051 string re  
+52       2219    00052 string re  
+53       6343    00053 string re  
+54       32185   00054 string re  
+55       24778   00055 string re  
+56       21758   00056 string re  
+57       28512   00057 string re  
+58       2906    00058 string re  
+59       6829    00059 string re  
+60       4978    00060 string re  
+61       27030   00061 string re  
+62       28272   00062 string re  
+63       2853    00063 string re  
+64       21711   00064 string re  
+65       23586   00065 string re  
+66       356     00066 string re  
+67       6732    00067 string re  
+68       5337    00068 string re  
+69       23917   00069 string re  
+70       29025   00070 string re  
+71       30013   00071 string re  
+72       20042   00072 string re  
+73       4059    00073 string re  
+74       2226    00074 string re  
+75       16187   00075 string re  
+76       21137   00076 string re  
+77       17627   00077 string re  
+78       17113   00078 string re  
+79       10658   00079 string re  
+80       24909   00080 string re  
+81       17583   00081 string re  
+82       1646    00082 string re  
+83       7822    00083 string re  
+84       15240   00084 string re  
+85       18172   00085 string re  
+86       8382    00086 string re  
+87       97      00087 string re  
+88       11955   00088 string re  
+89       26641   00089 string re  
+90       24351   00090 string re  
+91       3973    00091 string re  
+92       21349   00092 string re  
+93       9975    00093 string re  
+94       25108   00094 string re  
+95       12837   00095 string re  
+96       31700   00096 string re  
+97       14397   00097 string re  
+98       1574    00098 string re  
+99       17676   00099 string re  
+
+Number of records: 101
+Buf Stats: accesses = 465, disk reads = 62, disk writes = 78
+
+207 --> Query:  create index da (serial);
+208 --> Query:  create index db (serial);
+209 --> Query:  drop table da;
+210 --> Query:  drop table db;
+211 --> 

@@ -74,41 +74,45 @@ Status Operators::SMJ(const string& result,           // Output relation name
 	int count2 = 0;
 	while(status1 == OK){
 		
-		cout<<"count1 = "<<count1<<endl;
-		cout<<"count2 = "<<count2<<endl;
+//		cout<<"count1 = "<<count1<<endl;
+//		cout<<"count2 = "<<count2<<endl;
 		count1++;
 		count2 = 0;
 		
+
+
 		while(status2 == OK){
 			count2++;
 			if(matchRec(record1, record2, attrDesc1, attrDesc2) == 0){
 				// insert
-	                	Record outputRecord;
-                        	outputRecord.data = malloc(reclen);
-                        	outputRecord.length = reclen;
+	           	Record outputRecord;
+            	outputRecord.data = malloc(reclen);
+            	outputRecord.length = reclen;
 				int attrOffset = 0;
-                        	for (int i = 0; i < projCnt; i++) {
-                                	if (strcmp(attrDescArray[i].relName, attrDesc1.relName) == 0) {
-                                        	memcpy((char *)outputRecord.data + attrOffset, (char *) record1.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
-                                	}else if(strcmp(attrDescArray[i].relName, attrDesc2.relName) == 0){
-                                        	memcpy((char *)outputRecord.data + attrOffset, (char *) record2.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
-                                	}else{
-                                        	cout<<"relName not match"<<endl;
-                                        	assert(false);
-                                	}
-                                	attrOffset += attrDescArray[i].attrLen;
+        		for (int i = 0; i < projCnt; i++) {
+                	if (strcmp(attrDescArray[i].relName, attrDesc1.relName) == 0) {
+                    	memcpy((char *)outputRecord.data + attrOffset, (char *) record1.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
+  		          	}else if(strcmp(attrDescArray[i].relName, attrDesc2.relName) == 0){
+                    	memcpy((char *)outputRecord.data + attrOffset, (char *) record2.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
+                	}else{
+                    	cout<<"relName not match"<<endl;
+                    	assert(false);
+                	}
+                	attrOffset += attrDescArray[i].attrLen;
 				}
 
-                        	heapFile.insertRecord(outputRecord, outRid);
+				heapFile.insertRecord(outputRecord, outRid);
 				status2 = sortedFile2.next(record2);
 
+			}else if(matchRec(record1, record2, attrDesc1, attrDesc2) > 0){
+				status2 = sortedFile2.next(record2);
 			}else{
 				break;
 			}
 		}		
 		prevRecord1 = record1;
 		status1 = sortedFile1.next(record1);
-		if( matchRec(prevRecord1, record1, attrDesc1, attrDesc1) == 0){			
+		if( matchRec(prevRecord1, record1, attrDesc1, attrDesc1) != 0){			
 			sortedFile2.setMark();
 		}else{
 			sortedFile2.gotoMark();
