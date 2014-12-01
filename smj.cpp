@@ -107,6 +107,7 @@ Status Operators::SMJ(const string& result,           // Output relation name
 			sortedFile2.setMark();
 		}else{
 			sortedFile2.gotoMark();
+			status2 = sortedFile2.next(record2);
 		}
 	}
 
