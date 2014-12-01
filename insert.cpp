@@ -30,7 +30,6 @@ Status Updates::Insert(const string& relation,      // Name of the relation
 	map<string, attrInfo> attrInfoMap;
 
 	HeapFile heapFile(relation, status);
-
 	
 	attrCat->getRelInfo(relation, attrDescCnt, AttrDescArray);
 
@@ -72,7 +71,6 @@ Status Updates::Insert(const string& relation,      // Name of the relation
 		return status;
 	}
 
-
 	// update index
 	for(int i = 0;i < attrDescCnt; i++){
 		if(AttrDescArray[i].indexed){
@@ -82,14 +80,14 @@ Status Updates::Insert(const string& relation,      // Name of the relation
 			if(status != OK){
 				return status;
 			}
+	
 			index.insertEntry((char*)record.data + AttrDescArray[i].attrOffset, outRid);
 	
 		}
 	}	
 	
-
-	// Utilities utilities;
-	// status = utilities.Print(relation);
+	//Utilities utilities;
+	//status = utilities.Print(relation);
 
     return OK;
 }
