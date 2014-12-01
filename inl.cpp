@@ -30,11 +30,15 @@ Status Operators::INL(const string& result,           // Name of the output rela
 	RID outRid, outRid1, outRid2;
 	HeapFile heapFile(result, status);
 
-	HeapFileScan heapFileScan[] = { HeapFileScan(attrDesc1.relName, status), HeapFileScan(attrDesc2.relName, status) };
+	HeapFileScan heapFileScan[] = { HeapFileScan(attrDesc1.relName, status1), HeapFileScan(attrDesc2.relName, status2) };
 	AttrDesc attrDesc[] = {attrDesc1, attrDesc2};
 
-	if(status != OK){
-		return status;
+	if(status1 != OK){
+		return status1;
+	}
+
+	if(status2 != OK){
+		return status2;
 	}
 
 	int idx1, idx2;
@@ -52,9 +56,9 @@ Status Operators::INL(const string& result,           // Name of the output rela
 	}
 
 	status1 = heapFileScan[idx1].scanNext(outRid1, record1);
-	void* attrValue;	
+	void* attrValue = 0;	
 	while(status1 == OK) {
-
+		//memset((char *)attrValue, 0, attrDesc[idx1].attrLen);
 		memcpy(attrValue, (char *) record1.data + attrDesc[idx1].attrOffset, attrDesc[idx1].attrLen);
 
 		status2 = index.startScan(attrValue);

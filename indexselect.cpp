@@ -43,9 +43,7 @@ Status Operators::IndexSelect(const string& result,       // Name of the output 
 	}
 
 	status = index.scanNext(outRid);
-	if (status != OK){
-		return status;
-	}
+
 	while(status == OK){
 		heapFileScan.getRandomRecord(outRid, record);
 			

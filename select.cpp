@@ -20,18 +20,9 @@ Status Operators::Select(const string & result,      // name of the output relat
 		         const void *attrValue)     // literal value in the predicate
 {
 
-	//cout<<"result: "<<result<<endl;
-
-	//for(int i = 0; i < projCnt; i++){
-	//	cout<<"projNames["<<i<<"].relName: "<<projNames[i].relName<<endl;
-	//	cout<<"projNames["<<i<<"].attrName: "<<projNames[i].attrName<<endl;
-	//	cout<<"projNames["<<i<<"].attrType: "<<projNames[i].attrType<<endl;
-	// 	cout<<"projNames["<<i<<"].attrLen: "<<projNames[i].attrLen<<endl;
-	// }	
-
 	Status status;
 	AttrDesc attrDesc;
-	// sselect all attributes
+	
 	AttrDesc projNamesDesc[ projCnt ];	
 	
 	int projLength = 0;
@@ -41,20 +32,19 @@ Status Operators::Select(const string & result,      // name of the output relat
 	}
 
 	if(attr == 0){
-		ScanSelect(result, projCnt, projNamesDesc, 0, op, attrValue, projLength);
-
-		return OK;
+		status = ScanSelect(result, projCnt, projNamesDesc, 0, op, attrValue, projLength);
+		return status;
 	}
 
 	status = attrCat->getInfo(string(attr->relName), string(attr->attrName), attrDesc);
 		
 	if (op == EQ && attrDesc.indexed) {
-		IndexSelect(result, projCnt, projNamesDesc, &attrDesc, op, attrValue, projLength);
+		status = IndexSelect(result, projCnt, projNamesDesc, &attrDesc, op, attrValue, projLength);
 	}
 	else {
-		ScanSelect(result, projCnt, projNamesDesc, &attrDesc, op, attrValue, projLength);
+		status = ScanSelect(result, projCnt, projNamesDesc, &attrDesc, op, attrValue, projLength);
 	}
 
-	return OK;
+	return status;
 }
 

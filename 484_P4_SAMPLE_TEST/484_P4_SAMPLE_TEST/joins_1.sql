@@ -233,7 +233,7 @@ SELECT DA.serial, DA.ikey, DA.filler FROM DA, DB WHERE DA.serial = DB.serial;
 CREATE INDEX DA (serial); 
 CREATE INDEX DB (serial); 
 
---SELECT DA.serial, DA.ikey, DA.filler FROM DA, DB WHERE DA.serial = DB.serial; 
+SELECT DA.serial, DA.ikey, DA.filler FROM DA, DB WHERE DA.serial = DB.serial; 
 
 DROP TABLE DA; 
 DROP TABLE DB;

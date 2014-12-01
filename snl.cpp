@@ -48,11 +48,15 @@ Status Operators::SNL(const string& result,           // Output relation name
 	RID outRid, outRid1, outRid2;
 	HeapFile heapFile(result, status);
 
-	HeapFileScan heapFileScan[] = { HeapFileScan(attrDesc1.relName, status), HeapFileScan(attrDesc2.relName, status) };
+	HeapFileScan heapFileScan[] = { HeapFileScan(attrDesc1.relName, status1), HeapFileScan(attrDesc2.relName, status2) };
 	AttrDesc attrDesc[] = {attrDesc1, attrDesc2};	
 
-	if(status != OK){
-		return status;
+	if(status1 != OK){
+		return status1;
+	}
+
+	if(status2 != OK){
+		return status2;
 	}
 
 	int idx1, idx2;
@@ -63,19 +67,13 @@ Status Operators::SNL(const string& result,           // Output relation name
 	}
 	idx2 = 1 - idx1;
 
-	int count1 = 0;
-	int count2 = 0;	
-
 	status1 = heapFileScan[idx1].scanNext(outRid1, record1);
 	status2 = heapFileScan[idx2].scanNext(outRid2, record2);	
 	heapFileScan[idx2].setMarker();
 	while(status1 == OK) {
-		count1++;
-		cout << "count2 = " << count2 << endl;
-		count2 = 0;
 		status2 = heapFileScan[idx2].gotoMarker(outRid2, record2);
 		while(status2 == OK) {
-			count2++;
+
 			int cmp;
 			if (idx1 == 0){
 				cmp = matchRec(record1, record2, attrDesc1, attrDesc2);
@@ -104,89 +102,6 @@ Status Operators::SNL(const string& result,           // Output relation name
 		}
 		status1 = heapFileScan[idx1].scanNext(outRid1, record1);
 	}
-			
-	cout << "count1 = " << count1 << endl;
-
-	/*
-	if(heapFileScan1.getRecCnt() < heapFileScan2.getRecCnt()){
-		status1 = heapFileScan1.scanNext(outRid1, record1);
-		status2 = heapFileScan2.scanNext(outRid2, record2);	
-		heapFileScan2.setMarker();
-		while(status1 == OK) {
-				count1++;
-				status2 = heapFileScan2.gotoMarker(outRid2, record2);
-				cout << "count2 = " << count2 << endl;
-				count2 = 0;
-			while(status2 == OK) {
-				count2++;
-				int cmp;
-				cmp = matchRec(record1, record2, attrDesc1, attrDesc2);
-
-				if(checkMatch(cmp, op) == true){
-
-					Record outputRecord;
-					outputRecord.data = malloc(reclen);
-					outputRecord.length = reclen;
-					int attrOffset = 0;
-					for (int i = 0; i < projCnt; i++) {	
-						if (strcmp(attrDescArray[i].relName, attrDesc1.relName) == 0) {
-							memcpy((char *)outputRecord.data + attrOffset, (char *) record1.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
-						}else if(strcmp(attrDescArray[i].relName, attrDesc2.relName) == 0){
-							memcpy((char *)outputRecord.data + attrOffset, (char *) record2.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
-						}else{
-							cout<<"relName not match"<<endl;
-							assert(false);
-						}
-						attrOffset += attrDescArray[i].attrLen;
-					}
-					heapFile.insertRecord(outputRecord, outRid);
-				}
-				status2 = heapFileScan2.scanNext(outRid2, record2);
-			}
-			status1 = heapFileScan1.scanNext(outRid1, record1);
-		}
-			
-	}else{
-		status1 = heapFileScan1.scanNext(outRid1, record1);
-		status2 = heapFileScan2.scanNext(outRid2, record2);	
-		heapFileScan1.setMarker();
-		while(status2 == OK) {
-				status1 = heapFileScan1.gotoMarker(outRid1, record1);
-				cout << "count2 = " << count2 << endl;
-				count2 = 0;
-			while(status1 == OK) {
-				count2++;
-				int cmp;
-				cmp = matchRec(record1, record2, attrDesc1, attrDesc2);
-
-				if(checkMatch(cmp, op) == true){
-
-					Record outputRecord;
-					outputRecord.data = malloc(reclen);
-					outputRecord.length = reclen;
-					int attrOffset = 0;
-					for (int i = 0; i < projCnt; i++) {	
-						if (strcmp(attrDescArray[i].relName, attrDesc1.relName) == 0) {
-							memcpy((char *)outputRecord.data + attrOffset, (char *) record1.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
-						}else if(strcmp(attrDescArray[i].relName, attrDesc2.relName) == 0){
-							memcpy((char *)outputRecord.data + attrOffset, (char *) record2.data + attrDescArray[i].attrOffset, attrDescArray[i].attrLen);
-						}else{
-							cout<<"relName not match"<<endl;
-							assert(false);							
-						}
-						attrOffset += attrDescArray[i].attrLen;
-					}
-					heapFile.insertRecord(outputRecord, outRid);
-				}
-				status1 = heapFileScan1.scanNext(outRid1, record1);
-			}
-			status2 = heapFileScan2.scanNext(outRid2, record2);
-		}
-	}
-	*/
-
-	// Utilities utilities;
-	// utilities.Print(result);
 
   	return OK;
 }

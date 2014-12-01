@@ -46,10 +46,6 @@ Status Operators::ScanSelect(const string& result,       // Name of the output r
 	}
 	
 	status = heapFileScan.scanNext(outRid, record);
-	if(status != OK){
-		return status;
-	}
-
 
 	while(status == OK){
 		Record outputRecord;
@@ -66,11 +62,7 @@ Status Operators::ScanSelect(const string& result,       // Name of the output r
 
 	heapFileScan.endScan();
 
-	//Utilities utilities;
-	//cout<<"Begin: utilities.Print(result): "<<endl;
-	//utilities.Print(result);
-	//cout<<"End: utilities.Print(result): "<<endl;
-	return status;
+	return OK;
 }
 
 

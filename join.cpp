@@ -63,12 +63,7 @@ Status Operators::Join(const string& result,           // Name of the output rel
         status = SNL(result, projCnt, projNamesDesc, attrDesc1, op, attrDesc2, projLength);  
     }
 
-    if( status != OK){
-        return status;
-    }
-  
-
-	return OK;
+	return status;
 }
 
 // Function to compare two record based on the predicate. Returns 0 if the two attributes 

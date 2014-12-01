@@ -205,109 +205,6 @@ Welcome to Minirel
 204 --> Query:  insert into db (serial, ikey, filler, dkey) values (100, 15805, 00100 string record, 110.0);
 205 --> Query:  select da.serial, da.ikey, da.filler from da, db where da.serial < db.serial;
 Algorithm: Simple NL Join
-count2 = 0
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count2 = 100
-count1 = 102
 serial.  ikey.1  filler.2         
 -------  ------  ---------------  
 0        11618   00000 string re  
@@ -524,6 +421,5 @@ Buf Stats: accesses = 465, disk reads = 62, disk writes = 78
 
 207 --> Query:  create index da (serial);
 208 --> Query:  create index db (serial);
-209 --> Query:  drop table da;
-210 --> Query:  drop table db;
-211 --> 
+209 --> Query:  select da.serial, da.ikey, da.filler from da, db where da.serial = db.serial;
+Algorithm: Indexed NL Join

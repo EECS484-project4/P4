@@ -28,7 +28,7 @@ Status Operators::SMJ(const string& result,           // Output relation name
 	Status status2;
 	
 	RID outRid;
-        HeapFile heapFile(result, status);
+    HeapFile heapFile(result, status);
 
 	unsigned int numUnpinnedPages;
 	numUnpinnedPages = bufMgr->numUnpinnedPages();
@@ -70,19 +70,10 @@ Status Operators::SMJ(const string& result,           // Output relation name
 	status2 = sortedFile2.next(record2);
 
 	sortedFile2.setMark();
-	int count1 = 0;
-	int count2 = 0;
 	while(status1 == OK){
 		
-//		cout<<"count1 = "<<count1<<endl;
-//		cout<<"count2 = "<<count2<<endl;
-		count1++;
-		count2 = 0;
-		
-
-
 		while(status2 == OK){
-			count2++;
+			
 			if(matchRec(record1, record2, attrDesc1, attrDesc2) == 0){
 				// insert
 	           	Record outputRecord;
@@ -118,7 +109,6 @@ Status Operators::SMJ(const string& result,           // Output relation name
 			sortedFile2.gotoMark();
 		}
 	}
-
 
   	return OK;
 }
